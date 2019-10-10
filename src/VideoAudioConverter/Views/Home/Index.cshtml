@@ -1,17 +1,24 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Công cụ chuyển đổi WMA sang MP3</h1>
+    <p>        
+        Chuyển đổi file wma sang mp3 trực tuyến và miễn phí
+    </p>
 </div>
 
 
 
-<form id="id_dropzone"
-      class="dropzone"
-      action="/api/v1/fileupload/"
-      enctype="multipart/form-data"
-      method="post">
-</form>
+<input type="file" name="fileImg" class="fileImg" style="display:none" accept="*" multiple/>
+<div class="alert alert-success" style="cursor:pointer" id="chooseFile">
+    Chọn file(s)
+</div>
+<div class="progress">
+    <div class="progress-bar progress-bar-striped bg-success">0%</div>
+</div>
+<br/>
+<div class="alert alert-warning" style="cursor:pointer" id="convertResult">
+     
+</div>
