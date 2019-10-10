@@ -10,7 +10,6 @@ using VideoAudioConverter.Models;
 
 namespace VideoAudioConverter.Controllers
 {
-
     [Route("api/v1")]
     public class ProcessingController : Controller
     {
@@ -35,18 +34,17 @@ namespace VideoAudioConverter.Controllers
                     Directory.CreateDirectory(uploadPath);
                 }
 
-                const int fileMaxLength = 1024 * 1024* 10;
+                const int fileMaxLength = 1024 * 1024 * 10;
                 var fileUrls = new List<string>();
                 foreach (var file in files)
                 {
                     var fileExtension = Path.GetExtension(file.FileName);
 
-                    if (file.Length > 0 && file.Length <= fileMaxLength && ( fileExtension.EndsWith("wma") || fileExtension.EndsWith("wav")))
-                    {                        
-                        
-                        using (var stream =  new FileStream(Path.Combine(uploadPath, file.FileName), FileMode.Create, FileAccess.Write))
+                    if (file.Length > 0 && file.Length <= fileMaxLength && (fileExtension.EndsWith("wma") || fileExtension.EndsWith("wav") || fileExtension.EndsWith("wav")))
+                    {
+                        using (var stream = new FileStream(Path.Combine(uploadPath, file.FileName), FileMode.Create, FileAccess.Write))
                         {
-                            await file.CopyToAsync(stream);                             
+                            await file.CopyToAsync(stream);
                             fileUrls.Add(file.FileName);
                         }
                     }
@@ -56,7 +54,7 @@ namespace VideoAudioConverter.Controllers
                 {
                     Data = fileUrls,
                     Code = 200,
-                    Message = "Ok "  
+                    Message = "Ok "
                 };
                 return Ok(fileItemResponse);
             }
@@ -85,9 +83,9 @@ namespace VideoAudioConverter.Controllers
                     Directory.CreateDirectory(uploadPath);
                 }
                 var fileToConvert = Path.Combine(uploadPath, model.FileName);
-                
+
                 var fileExtension = Path.GetExtension(model.FileName);
-                if (!(fileExtension.EndsWith("wma") || fileExtension.EndsWith("wav")))
+                if (!(fileExtension.EndsWith("wma") || fileExtension.EndsWith("wav") || fileExtension.EndsWith("mp4")))
                 {
                     var fileItemResponse = new
                     {
@@ -97,10 +95,8 @@ namespace VideoAudioConverter.Controllers
                     return Ok(fileItemResponse);
                 }
                 if (System.IO.File.Exists(fileToConvert))
-                    {
-
-
-                    var fileName = Path.GetFileNameWithoutExtension(model.FileName)+".mp3";
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(model.FileName) + ".mp3";
                     var fileToConvertOutput = Path.Combine(uploadPath, fileName);
                     var command = $"-y -i {fileToConvert} {fileToConvertOutput}";
                     Process proc = new Process();
@@ -111,7 +107,7 @@ namespace VideoAudioConverter.Controllers
                     var data = new FileModel
                     {
                         FileName = fileName,
-                        FileUrl = "https://files.tradingproedu.com/audio" + $"/{today.Year}/{today.Month}".PadLeft(2, '0') + "/"+fileName,
+                        FileUrl = "https://files.tradingproedu.com/audio" + $"/{today.Year}/{today.Month}".PadLeft(2, '0') + "/" + fileName,
                     };
 
                     var fileItemResponse = new
@@ -122,9 +118,10 @@ namespace VideoAudioConverter.Controllers
                     };
                     return Ok(fileItemResponse);
                 }
-                else {
+                else
+                {
                     var fileItemResponse = new
-                    {                      
+                    {
                         Code = 404,
                         Message = "File not found"
                     };
