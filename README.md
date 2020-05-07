@@ -1,6 +1,6 @@
 # video_audio_converter
 
-##How to build
+## How to build
 
 cd src\VideoAudioConverter
 
